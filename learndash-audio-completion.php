@@ -32,8 +32,12 @@ function ld_audio_completion_scripts() {
 				var completed = new Set();
 				var total = audioPlayers.length;
 				var nextTopicUrl = "' . esc_js( $next_topic_url ) . '";
+
 				// Hide the mark complete button
 				$(".learndash_mark_complete_button, #learndash_mark_complete_button").hide();
+
+				//Hide the next topic button 
+				$(".next-link").hide();
 
 				audioPlayers.each(function(index) {
 					var audioPlayer = this;
@@ -69,6 +73,7 @@ function ld_audio_completion_scripts() {
 		wp_add_inline_script( 'jquery', $script );
 	}
 }
+add_filter( 'learndash_lesson_auto_complete_default', '__return_false' );
 
 // Shortcode to embed audio player
 add_shortcode('ld_audio_completion', 'ld_audio_completion_shortcode');
