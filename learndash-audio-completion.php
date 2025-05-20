@@ -32,6 +32,8 @@ function ld_audio_completion_scripts() {
 				var completed = new Set();
 				var total = audioPlayers.length;
 				var nextTopicUrl = "' . esc_js( $next_topic_url ) . '";
+				// Hide the mark complete button
+				$(".learndash_mark_complete_button, #learndash_mark_complete_button").hide();
 
 				audioPlayers.each(function(index) {
 					var audioPlayer = this;
