@@ -36,9 +36,6 @@ function wdm_ld_audio_completion_scripts() {
 				// Hide the mark complete button
 				$(".learndash_mark_complete_button, #learndash_mark_complete_button").hide();
 
-				//Hide the next topic button 
-				$(".next-link").hide();
-
 				audioPlayers.each(function(index) {
 					var audioPlayer = this;
 					$(audioPlayer).data("audio-index", index);
