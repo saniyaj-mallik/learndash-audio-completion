@@ -1,20 +1,20 @@
 <?php
 /**
- * Plugin Name: LearnDash Audio Completion
- * Description: A shortcode to embed audio in LearnDash topics and mark them as complete when the audio finishes.
+ * Plugin Name: WDM LearnDash Audio Completion
+ * Description: A shortcode to embed audio in LearnDash topics and mark them as complete when the audio finishes. [wdm_ld_audio_completion url="file-path.mp3"]
  * Version: 1.2
- * Author: Your Name
+ * Author: Wisdmlabs
  * License: GPL2
  *
- * @package learndash-audio-completion
+ * @package WDM-learndash-audio-completion
  */
 
 // Enqueue JavaScript for audio completion tracking.
-add_action( 'wp_enqueue_scripts', 'ld_audio_completion_scripts' );
+add_action( 'wp_enqueue_scripts', 'wdm_ld_audio_completion_scripts' );
 /**
  * Enqueue and inject JavaScript for audio completion tracking on LearnDash topic pages.
  */
-function ld_audio_completion_scripts() {
+function wdm_ld_audio_completion_scripts() {
 	if ( is_singular( 'sfwd-topic' ) ) {
 		// Enqueue jQuery.
 		wp_enqueue_script( 'jquery' );
@@ -46,12 +46,12 @@ function ld_audio_completion_scripts() {
 						completed.add(index);
 						if (completed.size === total) {
 							$.ajax({
-								url: "' . admin_url('admin-ajax.php') . '",
+								url: "' . admin_url( 'admin-ajax.php' ) . '",
 								type: "POST",
 								data: {
-									action: "ld_mark_topic_complete",
+									action: "wdm_ld_mark_topic_complete",
 									topic_id: ' . get_the_ID() . ',
-									nonce: "' . wp_create_nonce('ld_audio_completion_nonce') . '"
+									nonce: "' . wp_create_nonce( 'wdm_ld_audio_completion_nonce' ) . '"
 								},
 								success: function(response) {
 									if (response.success) {
@@ -73,17 +73,17 @@ function ld_audio_completion_scripts() {
 		wp_add_inline_script( 'jquery', $script );
 	}
 }
-add_filter( 'learndash_lesson_auto_complete_default', '__return_false' );
 
-// Shortcode to embed audio player
-add_shortcode('ld_audio_completion', 'ld_audio_completion_shortcode');
+
+// Shortcode to embed audio player.
+add_shortcode( 'wdm_ld_audio_completion', 'wdm_ld_audio_completion_shortcode' );
 /**
  * Shortcode to embed audio player for LearnDash audio completion.
  *
  * @param array $atts Shortcode attributes.
  * @return string Audio player HTML or error message.
  */
-function ld_audio_completion_shortcode( $atts ) {
+function wdm_ld_audio_completion_shortcode( $atts ) {
 	// Only process on LearnDash topic pages.
 	if ( ! is_singular( 'sfwd-topic' ) ) {
 		return '';
@@ -95,7 +95,7 @@ function ld_audio_completion_shortcode( $atts ) {
 			'url' => '',
 		),
 		$atts,
-		'ld_audio_completion'
+		'wdm_ld_audio_completion'
 	);
 
 	// Validate audio URL.
@@ -116,13 +116,13 @@ function ld_audio_completion_shortcode( $atts ) {
 }
 
 // AJAX handler to mark topic as complete.
-add_action( 'wp_ajax_ld_mark_topic_complete', 'ld_mark_topic_complete_callback' );
+add_action( 'wp_ajax_wdm_ld_mark_topic_complete', 'wdm_ld_mark_topic_complete_callback' );
 /**
  * AJAX handler to mark LearnDash topic as complete when all audio players have finished.
  */
-function ld_mark_topic_complete_callback() {
-	check_ajax_referer( 'ld_audio_completion_nonce', 'nonce' );
-	
+function wdm_ld_mark_topic_complete_callback() {
+	check_ajax_referer( 'wdm_ld_audio_completion_nonce', 'nonce' );
+
 	$topic_id = isset( $_POST['topic_id'] ) ? intval( $_POST['topic_id'] ) : 0;
 	$user_id = get_current_user_id();
 
